@@ -16,16 +16,18 @@ public class Recipe {
     private String source;
     private String url;
     private String directrions;
-    //todo add
-    //private Difficulty difficulty;
+    @Enumerated(value=EnumType.STRING)
+    private Difficulty difficulty;
     @Lob
     private Byte[] image;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "recipe")
     private Set<Ingredient> ingredientSet;
-
     @OneToOne(cascade = CascadeType.ALL)
     private Notes notes;
-
+    @ManyToMany
+    @JoinTable(name="recipe_category", //el nombre que ponemos aquí es el nombre que va a tener la tabla y el id, el id de la tabla
+    joinColumns = @JoinColumn(name = "recipe_id"), inverseJoinColumns = @JoinColumn(name = "category_id"))//category_id es el nombre de la foreign key que se encuentra en la tabla recipe_ccategory
+    private Set<Category> categories; //el nombre de este atributo es el que se indica en el mapped by de category
     public String getDescription() {
         return description;
     }
@@ -82,6 +84,14 @@ public class Recipe {
         this.directrions = directrions;
     }
 
+    public Difficulty getDifficulty() {
+        return difficulty;
+    }
+
+    public void setDifficulty(Difficulty difficulty) {
+        this.difficulty = difficulty;
+    }
+
     public Byte[] getImage() {
         return image;
     }
@@ -104,5 +114,21 @@ public class Recipe {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public Set<Ingredient> getIngredientSet() {
+        return ingredientSet;
+    }
+
+    public void setIngredientSet(Set<Ingredient> ingredientSet) {
+        this.ingredientSet = ingredientSet;
+    }
+
+    public Set<Category> getCategories() {
+        return categories;
+    }
+
+    public void setCategories(Set<Category> categories) {
+        this.categories = categories;
     }
 }
