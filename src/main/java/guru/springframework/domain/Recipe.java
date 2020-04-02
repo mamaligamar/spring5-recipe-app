@@ -1,6 +1,7 @@
 package guru.springframework.domain;
 
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -15,19 +16,20 @@ public class Recipe {
     private Integer servings;
     private String source;
     private String url;
-    private String directrions;
+    @Lob
+    private String directions;
     @Enumerated(value=EnumType.STRING)
     private Difficulty difficulty;
     @Lob
     private Byte[] image;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "recipe")
-    private Set<Ingredient> ingredientSet;
+    private Set<Ingredient> ingredients = new HashSet<>();
     @OneToOne(cascade = CascadeType.ALL)
     private Notes notes;
     @ManyToMany
     @JoinTable(name="recipe_category", //el nombre que ponemos aquí es el nombre que va a tener la tabla y el id, el id de la tabla
     joinColumns = @JoinColumn(name = "recipe_id"), inverseJoinColumns = @JoinColumn(name = "category_id"))//category_id es el nombre de la foreign key que se encuentra en la tabla recipe_ccategory
-    private Set<Category> categories; //el nombre de este atributo es el que se indica en el mapped by de category
+    private Set<Category> categories = new HashSet<>(); //el nombre de este atributo es el que se indica en el mapped by de category
     public String getDescription() {
         return description;
     }
@@ -76,12 +78,12 @@ public class Recipe {
         this.url = url;
     }
 
-    public String getDirectrions() {
-        return directrions;
+    public String getDirections() {
+        return directions;
     }
 
-    public void setDirectrions(String directrions) {
-        this.directrions = directrions;
+    public void setDirections(String directions) {
+        this.directions = directions;
     }
 
     public Difficulty getDifficulty() {
@@ -116,12 +118,12 @@ public class Recipe {
         this.id = id;
     }
 
-    public Set<Ingredient> getIngredientSet() {
-        return ingredientSet;
+    public Set<Ingredient> getIngredients() {
+        return ingredients;
     }
 
-    public void setIngredientSet(Set<Ingredient> ingredientSet) {
-        this.ingredientSet = ingredientSet;
+    public void setIngredients(Set<Ingredient> ingredients) {
+        this.ingredients = ingredients;
     }
 
     public Set<Category> getCategories() {
